@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<title>Why the raccoon cross the road?</title>
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="words" class="words"><b>Why the raccoon cross the road?<br>遊戲說明<br>沉澱社長狸貓有大麻煩了!在一次豪賭中，狸貓欠了30位社員每人一份喜來登，幸好林森南盛產餐券，撿一撿說不定能保住社長的荷包(?)，請大家幫幫狸貓吧!<br><br><span style="color: red">目標: 用方向鍵或wasd移動，蒐集30張餐券帶回人行道</span><br><br><br><span  style="color: gray;font-size: 15px;">點擊視窗開始，還有，不要去撞車</span></b></div>
+<div id="main" class="main-div">
+<div id="cover" style="
+    position: absolute;
+    width: 500px;
+">
+<div style="position: absolute;left: -100px;height: 600px;width: 100px;background-color: white;z-index: 3;"></div>
+<div style="position: absolute;right: -100px;height: 600px;width: 100px;background-color: white;z-index: 3;"></div>
+</div>
+<div id="setting" class="setting">
+<h2 id="time_used" style="background-color: #fd37feaa;text-align: center;font-size: 30px;"></h2>
+<h2 id="collect_coupons_title" style="background-color: #3838ffaa;text-align: center;font-size: 30px;">collect coupons: </h2>
+<h2 id="get_coupons" style="background-color: #00bcd4aa;"></h2>
+<h2 id="over" style="visibility: hidden;background-color: #acff16aa;">great job, bring them to the first line!</h2>
+<h2 id="get_coin1" style="visibility: hidden;background-color: #ffff00aa;">get coin!</h2>
+<h2 id="get_coin2" style="visibility: hidden;background-color: #ffaa00aa;">coin collected!</h2>
+<h2 id="win" style="visibility: hidden;background-color: #fc0202aa;">you did it!</h2>
+</div>
+<div id="object" class="object">
+<img id="coin" class="1-2" src="./img/coin.png">
+<img id="raccoon" class="11-7" src="./img/raccoon.png">
+<img id="gameover" src="./img/0101.jpg" style="height: 50px;visibility: hidden;position: absolute;top: 0px:left: 0px;">
+<div id="car-control">
+<img id="car1" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car2" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car3" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car4" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car5" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car6" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car7" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car8" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car9" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car10" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car11" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+<img id="car12" src="./img/car1.png" style="height: 50px;position: absolute;top: 0px;left: 0px;transform: scaleX(-1);visibility: hidden">
+</div>
+</div>
+<div id="enviroment">
+<div id="top-zone" class="top-zone">
+<div id="r0" class="top row">
+<div id="0-0" class="col"><img id="coupon" class="coupon" style="visibility: hidden;" src="./img/coupon.png"></div>
+<div id="0-1" class="col"></div>
+<div id="0-2" class="col"></div>
+<div id="0-3" class="col"></div>
+<div id="0-4" class="col"></div>
+<div id="0-5" class="col"></div>
+<div id="0-6" class="col"></div>
+<div id="0-7" class="col"></div>
+<div id="0-8" class="col"></div>
+<div id="0-9" class="col"></div>
+</div>
+</div>
+<div id="square-zone" class="square-zone">
+<div id="r1" class="square row">
+<div id="1-0" class="col"></div>
+<div id="1-1" class="col"></div>
+<div id="1-2" class="col"></div>
+<div id="1-3" class="col"></div>
+<div id="1-4" class="col"></div>
+<div id="1-5" class="col"></div>
+<div id="1-6" class="col"></div>
+<div id="1-7" class="col"></div>
+<div id="1-8" class="col"></div>
+<div id="1-9" class="col"></div>
+</div>
+<div id="r2" class="square row">
+<div id="2-0" class="col"></div>
+<div id="2-1" class="col"></div>
+<div id="2-2" class="col"></div>
+<div id="2-3" class="col"></div>
+<div id="2-4" class="col"></div>
+<div id="2-5" class="col"></div>
+<div id="2-6" class="col"></div>
+<div id="2-7" class="col"></div>
+<div id="2-8" class="col"></div>
+<div id="2-9" class="col"></div>
+</div>
+<div id="r3" class="square row">
+<div id="3-0" class="col"></div>
+<div id="3-1" class="col"></div>
+<div id="3-2" class="col"></div>
+<div id="3-3" class="col"></div>
+<div id="3-4" class="col"></div>
+<div id="3-5" class="col"></div>
+<div id="3-6" class="col"></div>
+<div id="3-7" class="col"></div>
+<div id="3-8" class="col"></div>
+<div id="3-9" class="col"></div>
+</div>
+<div id="r4" class="square row">
+<div id="4-0" class="col"></div>
+<div id="4-1" class="col"></div>
+<div id="4-2" class="col"></div>
+<div id="4-3" class="col"></div>
+<div id="4-4" class="col"></div>
+<div id="4-5" class="col"></div>
+<div id="4-6" class="col"></div>
+<div id="4-7" class="col"></div>
+<div id="4-8" class="col"></div>
+<div id="4-9" class="col"></div>
+</div>
+<div id="r5" class="square row">
+<div id="5-0" class="col"></div>
+<div id="5-1" class="col"></div>
+<div id="5-2" class="col"></div>
+<div id="5-3" class="col"></div>
+<div id="5-4" class="col"></div>
+<div id="5-5" class="col"></div>
+<div id="5-6" class="col"></div>
+<div id="5-7" class="col"></div>
+<div id="5-8" class="col"></div>
+<div id="5-9" class="col"></div>
+</div>
+<div id="r6" class="square row">
+<div id="6-0" class="col"></div>
+<div id="6-1" class="col"></div>
+<div id="6-2" class="col"></div>
+<div id="6-3" class="col"></div>
+<div id="6-4" class="col"></div>
+<div id="6-5" class="col"></div>
+<div id="6-6" class="col"></div>
+<div id="6-7" class="col"></div>
+<div id="6-8" class="col"></div>
+<div id="6-9" class="col"></div>
+</div>
+<div id="r7" class="square row">
+<div id="7-0" class="col"></div>
+<div id="7-1" class="col"></div>
+<div id="7-2" class="col"></div>
+<div id="7-3" class="col"></div>
+<div id="7-4" class="col"></div>
+<div id="7-5" class="col"></div>
+<div id="7-6" class="col"></div>
+<div id="7-7" class="col"></div>
+<div id="7-8" class="col"></div>
+<div id="7-9" class="col"></div>
+</div>
+<div id="r8" class="square row">
+<div id="8-0" class="col"></div>
+<div id="8-1" class="col"></div>
+<div id="8-2" class="col"></div>
+<div id="8-3" class="col"></div>
+<div id="8-4" class="col"></div>
+<div id="8-5" class="col"></div>
+<div id="8-6" class="col"></div>
+<div id="8-7" class="col"></div>
+<div id="8-8" class="col"></div>
+<div id="8-9" class="col"></div>
+</div>
+<div id="r9" class="square row">
+<div id="9-0" class="col"></div>
+<div id="9-1" class="col"></div>
+<div id="9-2" class="col"></div>
+<div id="9-3" class="col"></div>
+<div id="9-4" class="col"></div>
+<div id="9-5" class="col"></div>
+<div id="9-6" class="col"></div>
+<div id="9-7" class="col"></div>
+<div id="9-8" class="col"></div>
+<div id="9-9" class="col"></div>
+</div>
+<div id="r10" class="square row">
+<div id="10-0" class="col"></div>
+<div id="10-1" class="col"></div>
+<div id="10-2" class="col"></div>
+<div id="10-3" class="col"></div>
+<div id="10-4" class="col"></div>
+<div id="10-5" class="col"></div>
+<div id="10-6" class="col"></div>
+<div id="10-7" class="col"></div>
+<div id="10-8" class="col"></div>
+<div id="10-9" class="col"></div>
+</div>
+</div>
+<div id="bottom-zone" class="bottom-zone">
+<div id="r11" class="bottom row">
+<div id="11-0" class="col"></div>
+<div id="11-1" class="col"></div>
+<div id="11-2" class="col"></div>
+<div id="11-3" class="col"></div>
+<div id="11-4" class="col"></div>
+<div id="11-5" class="col"></div>
+<div id="11-6" class="col"></div>
+<div id="11-7" class="col"></div>
+<div id="11-8" class="col"></div>
+<div id="11-9" class="col"></div>
+</div>
+</div>
+</div>
+</div>
+<script>console.log("html load success")</script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="./js/jquery.hotkeys.js"></script>
+<script src="./js/script.txt"></script>
+</body>
+</html>

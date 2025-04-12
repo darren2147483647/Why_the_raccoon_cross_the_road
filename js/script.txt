@@ -1,0 +1,207 @@
+console.log("script loaded success")
+console.log=()=>{}
+$(".col").html('<img id="coupon" class="coupon" style="visibility: hidden;" src="./img/coupon.png">')
+time=0;
+win_flag=false;
+stop_flag=false;
+stop=()=>{console.log("stop");stop_flag=true;}
+ticks=()=>{if(!stop_flag){tick();time=time+1;setTimeout(ticks,100);}else{stop_flag=false;}}
+start=()=>{console.log("start");ticks();}
+function shuffle(arr) {
+    var i,
+        j,
+        temp;
+    for (i = arr.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;
+};
+const coupon_amount=Math.floor(Math.random()*20)+31;
+coupon_map=new Array(120);
+for(i=0;i<coupon_map.length;i++){
+	if(i<coupon_amount){
+		coupon_map[i]=1;
+	}
+	else{
+		coupon_map[i]=0;
+	}
+}
+coupon_map=shuffle(coupon_map);
+for(i=0;i<coupon_map.length;i++){
+	if(coupon_map[i]==0){}
+	else{
+		coupon_r=Math.floor(i/10).toString();
+		coupon_c=i.toString().substr(-1);
+		$(".col#"+coupon_r+"-"+coupon_c+" .coupon").css("visibility","visible")
+	}
+}
+raccoon={
+r:11,
+c:Math.floor(Math.random()*10)
+}
+coin={
+r:Math.floor(Math.random()*10),
+c:Math.floor(Math.random()*10),
+v:1
+}
+move=0;
+move_count_down=-1;
+get_coupons=0;
+get_coin=0;
+class car{
+	constructor(row=0,left=0,way="toR",set=false){
+		this.r=row;
+		this.l=left;
+		this.w=way;
+		this.s=set;
+	}
+}
+cars=[0,0,0,0,0,0,0,0,0,0,0,0]
+rand=()=>{return Math.floor(Math.random()*50)+1}
+jam=[rand(),rand(),rand(),rand(),rand(),rand(),rand(),rand(),rand(),rand()]
+function isNumber(obj) {
+    return typeof obj === 'number' && !isNaN(obj)
+}
+function crush(){
+	for(i in cars){
+		if(cars[i].r==raccoon.r){
+			if(Math.abs(cars[i].l/50-raccoon.c)<=0.7){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+function render(){
+	const where=raccoon.r.toString()+"-"+raccoon.c.toString();
+	const clas=$("img#raccoon").attr("class").split("-");
+	const r=Number(clas[0]);
+	const c=Number(clas[1]);
+	const coin_clas=$("img#coin").attr("class").split("-");
+	const coin_r=Number(coin_clas[0]);
+	const coin_c=Number(coin_clas[1]);
+	if(coin.r==raccoon.r&&coin.c==raccoon.c&&coin.v==1){
+		coin.v=0;
+		get_coin=get_coin+1;
+		$("img#coin").css("visibility","hidden");
+	}
+	if(raccoon.r!=r||raccoon.c!=c){
+		$("img#raccoon").css({"top":((raccoon.r+r)*50/2).toString()+"px","left":((raccoon.c+c)*50/2).toString()+"px"})
+		setTimeout(()=>{$("img#raccoon").css({"top":(raccoon.r*50).toString()+"px","left":(raccoon.c*50).toString()+"px"})},70)
+		$("img#raccoon").attr({"class":raccoon.r.toString()+"-"+raccoon.c.toString()})
+	}
+	if(coin.r!=coin_r||coin.c!=coin_c||(coin.r==raccoon.r&&coin.c==raccoon.c&&coin.v==1)){
+		const coin_top_val=(coin.r*50).toString();
+		const coin_left_val=(coin.c*50).toString();
+		$("img#coin").attr({
+			"style":"top: "+coin_top_val+"px;"+"\n"+"left: "+coin_left_val+"px;"+"\nvisibility: "+(coin.v==1?"visible":"hidden")+";",
+			"class":coin.r.toString()+"-"+coin.c.toString()
+		})
+	}
+	$(".coupon").each(function(index){if($(this).css("visibility")=="visible"&&$(this).parent().attr("id")==where){$(this).css("visibility","hidden");get_coupons=get_coupons+1;}})
+	for(i=0;i<cars.length;i=i+1){
+		if(isNumber(cars[i])){
+			$("#car"+(i+1)).css("visibility","hidden")
+		}
+		else{
+			if(!cars[i].s){
+				cars[i].s=true;
+				$("#car"+(i+1)).attr("src","./img/car"+(Math.floor(Math.random()*10)+1)+".png")
+				$("#car"+(i+1)).css("visibility","visible")
+				$("#car"+(i+1)).css("top",(cars[i].r*50).toString()+"px")
+				$("#car"+(i+1)).css("transform",cars[i].w=="toR"?"scaleX(-1)":"scaleX(1)")
+			}
+			$("#car"+(i+1)).css("left",cars[i].l.toString()+"px")
+		}
+	}
+	if(crush()){
+		stop();
+		move=0;
+		move_count_down=0;
+		$("#raccoon").css("visibility","hidden")
+		$("#gameover").css("top",(raccoon.r*50).toString()+"px")
+		$("#gameover").css("left",(raccoon.c*50).toString()+"px")
+		$("#gameover").css("visibility","visible")
+		if(get_coin==1){
+			coin.r=raccoon.r;
+			coin.c=raccoon.c;
+			coin.v=1;
+			get_coin=0;
+			$("#coin").attr("class","-")
+		}
+		raccoon.r=11;
+		raccoon.c=Math.floor(Math.random()*10);
+		setTimeout(()=>{$("#raccoon").css("visibility","visible");$("#gameover").css("visibility","hidden");render();move=0;start()},1200);
+	}
+	if(!win_flag){$("#time_used").html("Time: <br>"+(time/10).toString())}
+	$("#get_coupons").text(get_coupons)
+	$("#get_coin1").css("visibility",get_coin>=1?"visible":"hidden")
+	$("#get_coin2").css("visibility",get_coin==2?"visible":"hidden")
+	$("#over").css("visibility",get_coupons>=30?"visible":"hidden")
+	if(get_coin==1&&raccoon.r==11){get_coin=2;}
+	if(get_coupons>=30&&raccoon.r==11){$("#win").css("visibility","visible");win_flag=true;}
+}
+$(document).bind("keydown","up",()=>{move=1;})
+$(document).bind("keydown","down",()=>{move=2;})
+$(document).bind("keydown","left",()=>{move=3;})
+$(document).bind("keydown","right",()=>{move=4;})
+$(document).bind("keydown","w",()=>{move=1;})
+$(document).bind("keydown","s",()=>{move=2;})
+$(document).bind("keydown","a",()=>{move=3;})
+$(document).bind("keydown","d",()=>{move=4;})
+tick=()=>{
+	console.log("tick\nmove: "+move+"\nmove_count_down: "+move_count_down)
+	if(move_count_down==0){
+		if(move==1&&raccoon.r>0){
+			raccoon.r=raccoon.r-1;
+			move_count_down=2;
+		}
+		if(move==2&&raccoon.r<11){
+			raccoon.r=raccoon.r+1;
+			move_count_down=2;
+		}
+		if(move==3&&raccoon.c>0){
+			raccoon.c=raccoon.c-1;
+			move_count_down=2;
+		}
+		if(move==4&&raccoon.c<9){
+			raccoon.c=raccoon.c+1;
+			move_count_down=2;
+		}
+	move=0;
+	}
+	else{
+		if(move_count_down>0){
+			move_count_down=move_count_down-1;
+		}
+	}
+	for(i in cars){
+		if(isNumber(cars[i])){
+			if(cars[i]<0){
+				summon_at_road=Math.floor(Math.random()*10);
+				if(jam[summon_at_road]<=0){
+					cars[i]=new car(summon_at_road+1,summon_at_road%2==0?-50:500,summon_at_road%2==0?"toR":"toL");
+					jam[summon_at_road]=Math.floor(Math.random()*50)+25;
+				}
+			}
+			else{
+				cars[i]=cars[i]-1;
+			}
+		}
+		else{
+			if(cars[i].l>500||cars[i].l<-50){
+				cars[i]=Math.floor(Math.random()*20)+30;
+			}
+			else{
+				cars[i].l=cars[i].l+(cars[i].w=="toR"?15:-15);
+			}
+		}
+	}
+	jam=jam.map((i)=>{if(i>0){return i-1;}else{return 0;}});
+	render();
+}
+$("#words").click(()=>{$("#words").hide(3000);move_count_down=30;})
+start();
